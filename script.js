@@ -35,8 +35,11 @@ const creativeListContainer = document.getElementById(
 
 btnToggleSideDrawerEl.addEventListener("click", () => {
   toggleDrawerVisibility(true);
-  btnToggleSideDrawerEl.classList.add("pointer-events-none");
-  btnToggleSideDrawerEl.classList.add("opacity-50");
+  btnToggleSideDrawerEl.classList.add(
+    "opacity-50",
+    "pointer-events-none",
+    "bg-gray-300"
+  );
   btnToggleSideDrawerEl.setAttribute("disabled", true);
 });
 
@@ -64,8 +67,11 @@ btnAddNewCreative.addEventListener("click", () => {
 
 crossAddCreativesSection.addEventListener("click", () => {
   toggleDrawerVisibility(false);
-  btnToggleSideDrawerEl.classList.remove("pointer-events-none");
-  btnToggleSideDrawerEl.classList.remove("opacity-50");
+  btnToggleSideDrawerEl.classList.remove(
+    "pointer-events-none",
+    "opacity-50",
+    "bg-gray-300"
+  );
   btnToggleSideDrawerEl.removeAttribute("disabled");
 });
 
@@ -191,11 +197,17 @@ function handleValidationForAddingNewCreative() {
     titleStr.length > 0 && subtitleStr.length > 0 && isSelected;
 
   if (isValidated) {
-    btnAddNewCreative.classList.remove("opacity-50");
-    btnAddNewCreative.classList.remove("pointer-events-none");
+    btnAddNewCreative.classList.remove(
+      "opacity-50",
+      "pointer-events-none",
+      "bg-gray-300"
+    );
   } else {
-    btnAddNewCreative.classList.add("opacity-50");
-    btnAddNewCreative.classList.add("pointer-events-none");
+    btnAddNewCreative.classList.add(
+      "opacity-50",
+      "pointer-events-none",
+      "bg-gray-300"
+    );
   }
 
   return isValidated;
