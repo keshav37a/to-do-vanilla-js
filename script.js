@@ -1,5 +1,5 @@
 handleFetchColors();
-let colors = [];
+const creativeElements = [];
 const addCreativeBtn = document.getElementById("add-creative-btn");
 const addCreativesSection = document.getElementById("add-creatives-section");
 const crossAddCreativesSection = document.getElementById(
@@ -11,6 +11,13 @@ const filterColorsContainer = document.getElementById(
 const sideDrawerColorContainer = document.getElementById(
   "add-colors-container-add-creatives"
 );
+const inputTitleElementSideDrawer = document.getElementById(
+  "title-input-add-creatives"
+);
+const inputSubTitleElementSideDrawer = document.getElementById(
+  "subtitle-input-add-creatives"
+);
+const btnAddNewCreative = document.getElementById("btn-add-new-creative");
 
 console.log(addCreativeBtn);
 addCreativeBtn.addEventListener("click", () => {
@@ -26,6 +33,16 @@ crossAddCreativesSection.addEventListener("click", () => {
   addCreativeBtn.classList.remove("opacity-50");
   addCreativeBtn.removeAttribute("disabled");
 });
+
+inputTitleElementSideDrawer.addEventListener(
+  "input",
+  handleValidationForAddingNewCreative
+);
+
+inputSubTitleElementSideDrawer.addEventListener(
+  "input",
+  handleValidationForAddingNewCreative
+);
 
 function toggleDrawerVisibility(makeVisible) {
   if (makeVisible) {
@@ -70,4 +87,16 @@ function handleFetchColors() {
       console.log(data.colors);
       addColorsInFilterAndDrawers(data?.colors);
     });
+}
+
+function handleValidationForAddingNewCreative() {
+  const titleStr = inputTitleElementSideDrawer.value;
+  const subtitleStr = inputSubTitleElementSideDrawer.value;
+  if (titleStr.length > 0 && subtitleStr.length > 0) {
+    btnAddNewCreative.classList.remove("opacity-50");
+    btnAddNewCreative.classList.remove("pointer-events-none");
+  } else {
+    btnAddNewCreative.classList.add("opacity-50");
+    btnAddNewCreative.classList.add("pointer-events-none");
+  }
 }
