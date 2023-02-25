@@ -13,7 +13,6 @@ const INPUT_FILTER_BY_TEXT = "filter-by-text-input";
 const CONTAINER_CREATIVE_LIST_CONTAINER = "creative-list-container";
 const CREATIVE_ELEMENT_COUNT = "creative-el-count";
 const PROGRESS_BAR_FILLED = "progress-bar_filled";
-const COLOR_FILTER_CONTAINER = "color-filter-container";
 
 handleFetchColors(COLOR_COUNT);
 
@@ -296,7 +295,7 @@ function handleFetchColors(colorCount) {
     .then((res) => res.json())
     .then((data) => {
       document
-        .getElementById(COLOR_FILTER_CONTAINER)
+        .getElementById(CONTAINER_FILTER_COLOR_CONTAINER)
         .classList.remove("hidden");
       addColorsInFilterAndDrawers(data?.colors);
     });

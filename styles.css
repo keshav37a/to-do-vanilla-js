@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .filter-section__options {
   min-height: 100px;
 }
