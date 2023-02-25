@@ -13,6 +13,7 @@ const INPUT_FILTER_BY_TEXT = "filter-by-text-input";
 const CONTAINER_CREATIVE_LIST_CONTAINER = "creative-list-container";
 const CREATIVE_ELEMENT_COUNT = "creative-el-count";
 const PROGRESS_BAR_FILLED = "progress-bar_filled";
+const COLOR_FILTER_CONTAINER = "color-filter-container";
 
 handleFetchColors(COLOR_COUNT);
 
@@ -66,7 +67,7 @@ btnAddNewCreativeEl.addEventListener("click", () => {
     console.error("error in form validation");
   }
 
-  if (creativeElements.length >= 5) {
+  if (creativeElements.length >= COLOR_COUNT) {
     handleToggleDisableBtn(btnToggleSideDrawerEl);
     handleToggleDisableBtn(btnAddNewCreativeEl);
   }
@@ -74,7 +75,7 @@ btnAddNewCreativeEl.addEventListener("click", () => {
 
 crossAddCreativesSectionEl.addEventListener("click", () => {
   toggleDrawerVisibility(false);
-  if (creativeElements.length < 5) {
+  if (creativeElements.length < COLOR_COUNT) {
     handleToggleDisableBtn(btnToggleSideDrawerEl, false);
   }
 });
@@ -109,21 +110,27 @@ sideDrawerColorContainerEl.addEventListener("click", (e) => {
   }
 });
 
+/**
+ * To toggle display of side drawer
+ * @param {Boolean} makeVisible
+ */
 function toggleDrawerVisibility(makeVisible) {
   if (makeVisible) {
-    addCreativesSectionEl.classList.remove("opacity-0");
+    addCreativesSectionEl.classList.remove("hidden");
   } else {
-    addCreativesSectionEl.classList.add("opacity-0");
+    addCreativesSectionEl.classList.add("hidden");
   }
 }
 
+/**
+ * This function filters the items based on colors and text
+ *
+ */
 function handleFilterItems() {
   if (creativeElements.length > 0) {
     const text = inputFilterByTextEl.value;
     const shouldFilterColors = selectedColorsToBeFilteredMap.size > 0;
     const shouldFilterText = text.length > 2;
-    console.log("shouldFilterColors: ", shouldFilterColors);
-    console.log("shouldFilterText: ", shouldFilterText);
     creativeElements.forEach(
       ({ color, id, title: itemTitle, subtitle: itemSubtitle }) => {
         const isTextPresent = shouldFilterText
@@ -139,28 +146,39 @@ function handleFilterItems() {
         }
       }
     );
-
-    // if (text.length > 2 || Object.keys(selectedColorsToBeFiltered).length > 0) {
-    // }
   }
 }
 
+/**
+ * This function appends all the color elements to dom
+ *
+ * @param {Array} colors - array of color strings
+ *
+ */
 function addColorsInFilterAndDrawers(colors = []) {
   if (colors.length > 0) {
     colors.forEach((colorHash) => {
-      const colorElFilter = createSingleColorElement(colorHash);
-      const colorElAddCreative = createSingleColorElement(colorHash);
+      const colorForFilterSectionEl =
+        handleCreateSingleColorElementToDom(colorHash);
+      const colorForAddingToDomEl =
+        handleCreateSingleColorElementToDom(colorHash);
 
-      colorElFilter.id = `${CONTAINER_FILTER_COLOR_CONTAINER}-${colorHash}`;
-      colorElAddCreative.id = `${CONTAINER_SIDE_DRAWER_COLOR_CONTAINER}-${colorHash}`;
+      colorForFilterSectionEl.id = `${CONTAINER_FILTER_COLOR_CONTAINER}-${colorHash}`;
+      colorForAddingToDomEl.id = `${CONTAINER_SIDE_DRAWER_COLOR_CONTAINER}-${colorHash}`;
 
-      filterColorsContainerEl.appendChild(colorElFilter);
-      sideDrawerColorContainerEl.appendChild(colorElAddCreative);
+      filterColorsContainerEl.appendChild(colorForFilterSectionEl);
+      sideDrawerColorContainerEl.appendChild(colorForAddingToDomEl);
     });
   }
 }
 
-function createSingleColorElement(color) {
+/**
+ * This function creates and appends a DOM element for a single color
+ *
+ * @param {String} color
+ * @returns {HTMLDivElement}
+ */
+function handleCreateSingleColorElementToDom(color) {
   let colorParentEl = document.createElement("div");
   let colorEl = document.createElement("div");
 
@@ -187,6 +205,12 @@ function createSingleColorElement(color) {
   return colorParentEl;
 }
 
+/**
+ * This function selects / unselects the color element from both sections. Adds / Removes the selected data attribute and styles
+ * @param {String} containerType - The id of the container from where the color is selected. Could be filter section or from right drawer
+ * @param {String} color - The hashcode of color
+ * @param {Boolean} onlySingleSelect - Boolean to check whether all other selected elements should be unselected or not
+ */
 function handleSelectColorElement(containerType, color, onlySingleSelect) {
   const colorEl = document.getElementById(`${containerType}-${color}`);
   const isColorSelected = colorEl.dataset.selected;
@@ -223,7 +247,6 @@ function handleSelectColorElement(containerType, color, onlySingleSelect) {
       colorEl.removeAttribute("data-selected");
     }
   }
-  console.log(selectedColorsToBeFilteredMap);
 }
 
 /**
@@ -265,13 +288,16 @@ function handleValidationForAddingNewCreative() {
 
 /**
  * This function fetches the list of random colors and calls addColorsInFilterAndDrawers function
+ * @param {Number} colorCount - number of colors to fetch (equates to number of items that can be added for the time being)
  */
 function handleFetchColors(colorCount) {
   let url = `https://random-flat-colors.vercel.app/api/random?count=${colorCount}`;
   fetch(url)
     .then((res) => res.json())
     .then((data) => {
-      console.log(data.colors);
+      document
+        .getElementById(COLOR_FILTER_CONTAINER)
+        .classList.remove("hidden");
       addColorsInFilterAndDrawers(data?.colors);
     });
 }
@@ -309,7 +335,6 @@ function handleAddNewCreativeElementToList(newCreativeElementObj) {
     CREATIVE_ELEMENT_COUNT
   );
   const progressBarFilled = document.getElementById(PROGRESS_BAR_FILLED);
-  console.log(progressBarFilled);
   const id = newCreativeElementObj.id;
   creativeElements.push(newCreativeElementObj);
 
@@ -318,19 +343,29 @@ function handleAddNewCreativeElementToList(newCreativeElementObj) {
    */
   const creativeItemEl = document.createElement("div");
   creativeItemEl.id = id;
-  creativeItemEl.classList.add("creative-item", "my-4", "p-8", "rounded-2xl");
+  creativeItemEl.classList.add(
+    "creative-item",
+    "my-4",
+    "p-8",
+    "rounded-2xl",
+    "border-2",
+    "border-black"
+  );
   creativeItemEl.style.backgroundColor = newCreativeElementObj.color;
+  creativeItemEl.style.width = "50%";
 
   /**
    * Creates title
    */
   const creativeItemTitle = document.createElement("h1");
+  creativeItemTitle.classList.add("text-xl");
   creativeItemTitle.innerText = newCreativeElementObj.title;
 
   /**
    * Creates subtitle
    */
   const creativeItemSubTitle = document.createElement("h3");
+  creativeItemSubTitle.classList.add("text-md");
   creativeItemSubTitle.innerText = newCreativeElementObj.subtitle;
 
   /**
@@ -350,11 +385,9 @@ function handleAddNewCreativeElementToList(newCreativeElementObj) {
   /**
    * Sets item count and progress bar
    */
-  creativeElementCountEl.innerText = `${creativeElements.length} / ${COLOR_COUNT}`;
+  creativeElementCountEl.innerText = `${creativeElements.length} / ${COLOR_COUNT} Creatives`;
   progressBarFilled.classList.remove("w-0");
   progressBarFilled.style.width = `${Math.round(
     (creativeElements.length / COLOR_COUNT) * 100
   )}%`;
 }
-
-console.log(Math.round((creativeElements.length / COLOR_COUNT) * 100));

@@ -1,0 +1,26 @@
+.filter-section__options {
+  min-height: 100px;
+}
+
+#btn-add-new-creative {
+  bottom: 60px;
+}
+
+#color-filter-placeholder-wrapper {
+  min-width: 230px;
+}
+
+#filter-by-text-input {
+  width: 250px;
+  border: 2px solid black;
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  overflow-y: scroll;
+}
+*::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #000;
+}
