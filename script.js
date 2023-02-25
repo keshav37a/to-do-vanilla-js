@@ -16,6 +16,8 @@ const PROGRESS_BAR_FILLED = "progress-bar_filled";
 
 handleFetchColors(COLOR_COUNT);
 
+const debouncedFilter = debounce(handleFilterItems, 250);
+
 const creativeElements = [];
 const filteredCreativeElements = [];
 let selectedColorToBeAdded = "";
@@ -44,7 +46,7 @@ const creativeListContainerEl = document.getElementById(
 );
 const inputFilterByTextEl = document.getElementById(INPUT_FILTER_BY_TEXT);
 
-inputFilterByTextEl.addEventListener("input", handleFilterItems);
+inputFilterByTextEl.addEventListener("input", debouncedFilter);
 
 btnToggleSideDrawerEl.addEventListener("click", () => {
   toggleDrawerVisibility(true);
@@ -389,4 +391,17 @@ function handleAddNewCreativeElementToList(newCreativeElementObj) {
   progressBarFilled.style.width = `${Math.round(
     (creativeElements.length / COLOR_COUNT) * 100
   )}%`;
+}
+
+function debounce(call, wait) {
+  let timeoutId = null;
+  return function (...args) {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      call(args);
+      clearTimeout(timeoutId);
+    }, wait);
+  };
 }
