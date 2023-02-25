@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do - Vanilla JS</title>
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <script defer src="./script.js"></script>
+  <body>
+    <header class="p-4">
+      <h1 class="text-center text-2xl font-bold">To Do List</h1>
+    </header>
+    <section class="filter-section p-4">
+      <h2 class="text-xl mb-2">Filter By</h2>
+      <div class="filter-section__options flex gap-12">
+        <!-- Title filter option -->
+        <div class="filter-section__options__title">
+          <h3>Title / Subtitle</h3>
+          <input
+            placeholder="Search by title / subtitle"
+            class="mt-2 border p-2 outline-none rounded-[12px] w-80"
+            id="filter-by-text-input"
+          />
+        </div>
+        <!-- Title filter ends -->
+
+        <!-- Color filter option -->
+        <div class="filter-section__options__colors">
+          <div>Colors</div>
+          <div id="filter-colors-container" class="flex flex-wrap p-2"></div>
+        </div>
+        <!-- Color filter option ends -->
+      </div>
+    </section>
+    <section class="creative-list-section p-4">
+      <div class="flex gap-4 items-center mb-4">
+        <div>0 / 5 Creatives</div>
+        <button
+          id="add-creative-btn"
+          class="p-2 text-black border-2 outline-none"
+        >
+          + Add Creative
+        </button>
+      </div>
+      <div
+        class="progress-bar overflow-x-hidden h-6 w-4/6 border-2 rounded-2xl"
+      >
+        <div class="progress-bar_filled w-3/6 h-full bg-black" />
+      </div>
+      <div id="creative-list-container"></div>
+    </section>
+
+    <!-- Side nav drawer starts -->
+    <section
+      id="add-creatives-section"
+      class="add-creatives-drawer p-12 w-96 border-2 h-full fixed right-0 top-0 bg-white opacity-0"
+    >
+      <div class="mb-8">
+        <h1 class="inline font-semibold text-xl">Creative Creation</h1>
+        <span
+          id="cross-add-creatives-drawer"
+          class="inline-block ml-10 font-bold cursor-pointer"
+          >&#10005;</span
+        >
+      </div>
+      <div class="mb-8">
+        <h3>Title</h3>
+        <input
+          placeholder="Add title"
+          class="mt-2 border p-2 outline-none rounded-[12px] w-full"
+          id="title-input-add-creatives"
+        />
+      </div>
+      <div class="mb-8">
+        <h3>Subtitle</h3>
+        <input
+          placeholder="Add subtitle"
+          class="mt-2 border p-2 outline-none rounded-[12px] w-full"
+          id="subtitle-input-add-creatives"
+        />
+      </div>
+      <div>
+        <h3>Background color</h3>
+      </div>
+      <div
+        id="add-colors-container-add-creatives"
+        class="flex flex-wrap p-2"
+      ></div>
+      <button class="mt-2 p-2 border-2 w-32 rounded-l absolute bottom-[10px]">
+        Done
+      </button>
+    </section>
+    <!-- Side nav drawer ends -->
+  </body>
+</html>
